@@ -14,6 +14,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.jsp.book.dto.LoginDto;
 import com.jsp.book.dto.ScreenDto;
 import com.jsp.book.entity.Screen;
+import com.jsp.book.entity.Seat;
 import com.jsp.book.repository.ScreenRepository;
 import com.jsp.book.dto.PasswordDto;
 import com.jsp.book.dto.TheaterDto;
@@ -29,7 +30,7 @@ import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
-@Service
+@Service		
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
@@ -494,5 +495,33 @@ public class UserServiceImpl implements UserService {
 				return "redirect:/manage-screens/" + screen.getTheater().getId();
 			}
 	}
+		
+		@Override
+		public String manageSeats(Long id, HttpSession session, ModelMap map, RedirectAttributes attributes) {
+			User user = getUserFromSession(session);
+			if (user == null || !user.getRole().equals("ADMIN")) {
+				attributes.addFlashAttribute("fail", "Invalid Session");
+				return "redirect:/login";
+			} else {
+				Screen screen = screenRepository.findById(id).orElseThrow();
+				List<Seat> seats = screen.getSeats();
+				map.put("seats", seats);
+				map.put("screenId", id);
+				return "manage-seats.html";
+			}
+		}
+
+		@Override
+		public String addSeats(Long id, HttpSession session, ModelMap map, RedirectAttributes attributes) {
+			User user = getUserFromSession(session);
+			if (user == null || !user.getRole().equals("ADMIN")) {
+				attributes.addFlashAttribute("fail", "Invalid Session");
+				return "redirect:/login";
+			} else {
+				Screen screen = screenRepository.findById(id).orElseThrow();
+				map.put("id", id);
+				return "add-seats.html";
+			}
+		}
 
 }
