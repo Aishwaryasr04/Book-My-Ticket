@@ -11,6 +11,7 @@ import com.jsp.book.dto.PasswordDto;
 import com.jsp.book.dto.TheaterDto;
 import com.jsp.book.dto.ScreenDto;
 import com.jsp.book.dto.UserDto;
+import com.jsp.book.dto.MovieDto;
 
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
@@ -60,10 +61,16 @@ public interface UserService {
 
 	String editScreen(Long id, HttpSession session, RedirectAttributes attributes, ModelMap map);
 
-	String updateScreen(@Valid ScreenDto screenDto, Long id, BindingResult result, HttpSession session,
+			String updateScreen(ScreenDto screenDto, Long id, BindingResult result, HttpSession session,
 			RedirectAttributes attributes, ModelMap map);
 	
 	String manageSeats(Long id, HttpSession session, ModelMap map, RedirectAttributes attributes);
 
 	String addSeats(Long id, HttpSession session, ModelMap map, RedirectAttributes attributes);
+	
+	String manageMovies(HttpSession session, RedirectAttributes attributes, ModelMap map);
+
+	String loadAddMovie(MovieDto movieDto, RedirectAttributes attributes, HttpSession session);
+
+	String addMovie(MovieDto movieDto, BindingResult result, RedirectAttributes attributes, HttpSession session);
 }
